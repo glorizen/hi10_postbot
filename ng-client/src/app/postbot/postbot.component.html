@@ -1,6 +1,6 @@
 <div class="center">
   <div style="padding: 20px 50px;">
-    <file-drop headertext="Drop files here" (onFileDrop)="dropped($event)" (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)">
+    <file-drop headertext="Drop files here" (onFileDrop)="dropped($event)">
       <!-- <span>optional content</span> -->
     </file-drop>
   </div>
@@ -28,9 +28,14 @@
     <div class="icon" *ngIf="!item.checked">
       <i class="far fa-times-circle"></i> &nbsp;
     </div>
-    <div class="crc">
+
+    <div class="crc" *ngIf="!item.crc32">
+      <i class="fas fa-sync-alt fa-spin"></i>
+    </div>
+    <div class="crc" *ngIf="item.crc32">
       {{ item.crc32 }}
     </div>
+    
     <div class="filename">
       {{ item.file.relativePath }}
     </div>

@@ -20,6 +20,7 @@ export class PostbotComponent implements OnInit {
   public files: any[] = [];
   public ignoredFiles: any[] = [];
   public fileDetails: any = {};
+  public promises = [];
 
   private table = new Uint32Array([
     0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419, 0x706af48f,
@@ -72,7 +73,8 @@ export class PostbotComponent implements OnInit {
     this.files = [];
     // this.myfiles
     const self = this;
-    for (const droppedFile of event.files) {
+    for (let index = 0; index < event.files.length; index++) {
+      const droppedFile = event.files[index];
 
       // Is it a file?
       if (droppedFile.fileEntry.isFile) {
@@ -90,6 +92,15 @@ export class PostbotComponent implements OnInit {
                 (file.size / 1024 / 1024).toFixed(2) + ' MB'
             ) : (file.size / 1024).toFixed(2) + ' KB'
 
+          self.files.push({
+            file: droppedFile,
+            details: file,
+            checked: true,
+            humanSize: humanSize,
+          });
+
+          this.promises.push(this.readFile(file, index));
+
           // this.files.push({
           //   file: droppedFile,
           //   details: file,
@@ -97,31 +108,31 @@ export class PostbotComponent implements OnInit {
           //   humanSize: humanSize
           // });
 
-          const reader = new FileReader();
-          reader.readAsArrayBuffer(file);
-          // const crc = this.crc32(reader.result);
-          const self = this;
+          // const reader = new FileReader();
+          // reader.readAsArrayBuffer(file);
+          // // const crc = this.crc32(reader.result);
+          // const self = this;
 
-          reader.onloadstart = function (event: any) {
-            console.log('reading file');
-          }
+          // reader.onloadstart = function (event: any) {
+          //   console.log('reading file');
+          // }
 
-          reader.onload = function (event: any) {
-            let fileCRC: any = self.crc32(event.target.result);
-            fileCRC = (fileCRC).toString(16).toUpperCase();
+          // reader.onload = function (event: any) {
+          //   let fileCRC: any = self.crc32(event.target.result);
+          //   fileCRC = (fileCRC).toString(16).toUpperCase();
             
-            self.files.push({
-              file: droppedFile,
-              details: file,
-              checked: true,
-              humanSize: humanSize,
-              crc32: fileCRC.length < 8 ? '0' + fileCRC : fileCRC
-            });
-          };
+            // self.files.push({
+            //   file: droppedFile,
+            //   details: file,
+            //   checked: true,
+            //   humanSize: humanSize,
+            //   crc32: fileCRC.length < 8 ? '0' + fileCRC : fileCRC
+            // });
+          // };
 
-          reader.onloadend = function(event: any) {
-            reader.abort();
-          }
+          // reader.onloadend = function(event: any) {
+          //   reader.abort();
+          // }
           // console.log(crc);
           // console.log(reader)
           // console.log(this.files);
@@ -151,14 +162,12 @@ export class PostbotComponent implements OnInit {
         console.log(droppedFile.relativePath, fileEntry);
       }
     }
-  }
 
-  public fileOver(event) {
-    console.log(event);
-  }
-
-  public fileLeave(event) {
-    console.log(event);
+    this.promises.reduce(function(current, next) {
+      return current.then(next);
+    }, Promise.resolve()).then(function() {
+      console.log('ended');
+    })
   }
 
   public toggle(givenFile) {
@@ -180,5 +189,29 @@ export class PostbotComponent implements OnInit {
       crc = (crc >>> 8) ^ this.table[(crc ^ stream[i]) & 0xFF];
     }
     return (crc ^ (-1)) >>> 0;
-  };
+  }
+
+  public readFile(file, index) {
+
+    const self = this;
+    return new Promise(function(resolve) {
+      const reader = new FileReader();
+      reader.readAsArrayBuffer(file);
+
+      reader.onload = function(event: any) {
+        console.log('reading');
+        let fileCRC: any = self.crc32(event.target.result);
+        fileCRC = (fileCRC).toString(16).toUpperCase();
+        fileCRC = fileCRC.length < 8 ? '0' + fileCRC : fileCRC;
+        console.log(fileCRC);
+
+        self.files[index].crc32 = fileCRC;
+        resolve();
+      }
+
+      reader.onloadend = function(event: any) {
+        reader.abort();
+      }
+    })
+  }
 }
