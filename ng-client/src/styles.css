@@ -6,3 +6,66 @@
 .center {
     text-align: center;
 }
+
+.lt-xs {
+    letter-spacing: 1px;
+}
+
+.pull-right {
+    float: right;
+}
+
+.red {
+    color: red;
+    transition: all 400ms;
+}
+
+.red:hover {
+    background-color: rgba(250, 0, 0, 0.3);
+    transition: all 400ms;
+}
+
+.green {
+    color: green;
+    transition: all 400ms;
+}
+
+.green:hover {
+    background-color: rgba(0, 250, 0, 0.3);
+    transition: all 400ms;
+}
+
+.orange {
+    color: orange;
+    transition: all 400ms;
+}
+
+.orange:hover {
+    background-color: rgba(250, 180, 0, 0.3);
+    transition: all 400ms;
+}
+
+.grey {
+    color: grey;
+    opacity: 0.6;
+    transition: all 400ms;
+}
+
+.grey:hover {
+    background-color: rgba(150, 150, 150, 0.3);
+    transition: all 400ms;
+}
+
+.boxed {
+    padding: 3px 5px;
+    border: 1px solid;
+    border-color: inherit;
+}
+
+.inline-block {
+    display: inline-block;
+}
+
+.clickable {
+    cursor: pointer;
+}

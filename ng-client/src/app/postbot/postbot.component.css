@@ -2,27 +2,6 @@ div.drop-zone {
     border: 3px solid #888888 !important;
 }
 
-.green {
-    color: rgb(30, 209, 30);
-    transition: all 400ms;
-}
-
-.unselect {
-    opacity: 0.50;
-    color: rgba(150, 150, 150);
-    transition: all 400ms;
-}
-
-.info {
-    font-size: 13px;
-    letter-spacing: 1px;
-    padding: 4px 6px;
-    border: 1px solid rgb(255, 115, 0);
-    color: rgb(255, 115, 0);
-    vertical-align: middle;
-    display: inline-block;
-    margin-right: 10px;
-}
 
 .crc {
     font-size: 12px;
@@ -67,14 +46,4 @@ div.drop-zone {
 div.entry {
     margin-bottom: 2px;
     cursor: pointer;
-}
-
-div.green:hover {
-    transition: all 400ms;
-    background-color: rgba(0, 255, 0, 0.2);
-}
-
-div.unselect:hover {
-    transition: all 400ms;
-    background-color: rgba(0, 0, 0, 0.2);
 }

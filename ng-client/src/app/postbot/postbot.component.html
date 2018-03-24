@@ -6,21 +6,29 @@
   </div>
 </div>
 
-<div class="center">
-  <div style="padding: 10px 20px">
-    <div class="info">
-      Captured Files : {{ files.length }}
-    </div>
-    <div class="info">
-      Selected Files : {{ files.length - ignoredFiles.length }}
-    </div>
+<div style="padding: 10px 50px">
+  <div class="orange boxed inline-block lt-xs">
+    <i class="fas fa-list"></i>&nbsp;Captured Files : {{ files.length }}
   </div>
+  <div class="green boxed inline-block lt-xs">
+    <i class="far fa-check-circle"></i>&nbsp;Selected Files : {{ files.length - ignoredFiles.length }}
+  </div>
+  <div class="grey boxed inline-block lt-xs">
+    <i class="far fa-times-circle"></i>&nbsp;Ignored Files : {{ ignoredFiles.length }}
+  </div>
+
+  <div class="red boxed inline-block lt-xs pull-right clickable"
+    (click)="checksum = !checksum">
+    <i class="fas fa-cog"></i>&nbsp;{{ checksum ? 'Hide' : 'Show' }} CRC32
+  </div>
+  
+
 </div>
 
 <div style="padding: 10px 50px;">
   <div *ngFor="let item of files; let i = index" class="entry"
     [class.green]="item.checked"
-    [class.unselect]="!item.checked" (click)="toggle(item)">
+    [class.grey]="!item.checked" (click)="toggle(item)">
     
     <div class="icon" *ngIf="item.checked">
       <i class="far fa-check-circle"></i> &nbsp;
@@ -29,10 +37,10 @@
       <i class="far fa-times-circle"></i> &nbsp;
     </div>
 
-    <div class="crc" *ngIf="!item.crc32">
+    <div class="crc" *ngIf="checksum && !item.crc32">
       <i class="fas fa-sync-alt fa-spin"></i>
     </div>
-    <div class="crc" *ngIf="item.crc32">
+    <div class="crc" *ngIf="checksum && item.crc32">
       {{ item.crc32 }}
     </div>
     
